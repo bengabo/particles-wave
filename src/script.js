@@ -29,7 +29,7 @@ const particleTexture = textureLoader.load("/textures/particles/1.png");
 const particlesMaterial = new THREE.PointsMaterial({
   color: 0xff88cc,
   map: particleTexture,
-  size: 0.3,
+  size: 0.7,
   sizeAttenuation: true,
   transparent: true,
   alphaMap: particleTexture,
@@ -41,10 +41,9 @@ const particlesMaterial = new THREE.PointsMaterial({
 });
 
 const changeTexture = () => {
-  const randomNumber = Math.floor(Math.random() * 12) + 1;
+  const randomNumber = Math.floor(Math.random() * 13) + 1;
   let newTexture = `/textures/particles/${randomNumber}.png`;
   currentTexture = newTexture;
-  console.log(currentTexture);
 
   textureLoader.load(newTexture, function (texture) {
     particlesMaterial.map = texture;
@@ -62,7 +61,7 @@ texturesButton.addEventListener("click", changeTexture);
 // Geometry
 const particlesSphereGeometry = new THREE.SphereGeometry(1, 32, 32);
 const particlesGeometry = new THREE.BufferGeometry();
-const count = 5000;
+const count = 2000;
 const positions = new Float32Array(count * 3);
 const colors = new Float32Array(count * 3);
 
@@ -113,9 +112,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.x = -2.5;
-camera.position.y = 2;
-camera.position.z = 5;
+camera.position.x = 2;
+camera.position.y = 0.25;
+camera.position.z = 4.5;
 cameraGroup.add(camera);
 scene.add(cameraGroup);
 
@@ -147,15 +146,14 @@ const tick = () => {
     const x = particlesGeometry.attributes.position.array[i3];
     const y = particlesGeometry.attributes.position.array[i3 + 1];
     const z = particlesGeometry.attributes.position.array[i3 + 2];
-    particlesGeometry.attributes.position.array[i3 + 1] = Math.sin(
-      elapsedTime + z + x
-    );
+    particlesGeometry.attributes.position.array[i3 + 1] =
+      Math.sin(elapsedTime + z + x) / 0.8;
   }
 
   particlesGeometry.attributes.position.needsUpdate = true;
 
   // Update camera
-  cameraGroup.rotation.y = elapsedTime * -0.1;
+  cameraGroup.rotation.y = elapsedTime * -0.05;
 
   // Update controls
   controls.update();
